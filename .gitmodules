@@ -1,0 +1,3 @@
+[submodule "src/reWZ"]
+	path = src/reWZ
+	url = https://github.com/angelsl/reWZ.git
