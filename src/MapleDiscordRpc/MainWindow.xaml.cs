@@ -1,4 +1,4 @@
-﻿//  Copyright 2022 Jonguk Kim
+﻿//  Copyright 2023 Jonguk Kim
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
@@ -12,6 +12,9 @@
 //   See the License for the specific language governing permissions and
 //   limitations under the License.
 
+using System.Windows;
+using MapleDiscordRpc.Data;
+
 namespace MapleDiscordRpc
 {
     public partial class MainWindow
@@ -20,7 +23,8 @@ namespace MapleDiscordRpc
         {
             InitializeComponent();
             ViewModel = new MainViewModel();
-            
+
+            if (Config.Value.StartMinimized) WindowState = WindowState.Minimized;
         }
     }
 }

@@ -12,11 +12,22 @@
 //   See the License for the specific language governing permissions and
 //   limitations under the License.
 
-namespace MapleDiscordRpc.Net;
+using Newtonsoft.Json;
 
-public enum PacketTypes : ushort
+namespace DataExtractor
 {
-    SelectWorldResult = 6,
-    StatChanged = 90,
-    UserEnterField = 497
+    public sealed class MapData
+    {
+        [JsonProperty("id")]
+        public int Id { get; set; }
+
+        [JsonProperty("mapName")]
+        public string MapName { get; set; } = string.Empty;
+
+        [JsonProperty("streetName")]
+        public string StreetName { get; set; } = string.Empty;
+
+        [JsonProperty("mapMark")]
+        public string MapMark { get; set; } = string.Empty;
+    }
 }

@@ -1,4 +1,18 @@
-﻿using System;
+﻿//  Copyright 2023 Jonguk Kim
+//
+//  Licensed under the Apache License, Version 2.0 (the "License");
+//  you may not use this file except in compliance with the License.
+//  You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+//   Unless required by applicable law or agreed to in writing, software
+//   distributed under the License is distributed on an "AS IS" BASIS,
+//   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//   See the License for the specific language governing permissions and
+//   limitations under the License.
+
+using System;
 using System.Collections.Generic;
 using MapleDiscordRpc.Data;
 using PacketDotNet;
@@ -185,7 +199,33 @@ public sealed class MapleSession : IDisposable
             {
                 switch ((PacketTypes) packet.Opcode)
                 {
-                    case PacketTypes.OnEnterField:
+                    case PacketTypes.SelectWorldResult:
+                    {
+                        DiscordManager.Instance.ResetPresence();
+                        break;
+                    }
+                    case PacketTypes.StatChanged:
+                    {
+                        packet.Skip(3);
+                        var mask = (CharacterStat) packet.ReadInt();
+
+                        if (mask.HasFlag(CharacterStat.Level))
+                        {
+                            var level = packet.ReadInt();
+                            DiscordManager.Instance.Level = level;
+                            DiscordManager.Instance.UpdatePresence();
+                        }
+
+                        if (mask.HasFlag(CharacterStat.Job))
+                        {
+                            var jobId = packet.ReadShort();
+                            DiscordManager.Instance.Job = jobId;
+                            DiscordManager.Instance.UpdatePresence();
+                        }
+
+                        break;
+                    }
+                    case PacketTypes.UserEnterField:
                     {
                         var channelId = packet.ReadInt();
                         packet.Skip(5);
@@ -207,14 +247,21 @@ public sealed class MapleSession : IDisposable
                             packet.Skip(43);
                             var mapId = packet.ReadInt();
 
-                            Console.WriteLine($"Name: {name}, MapId: {mapId}");
+                            Console.WriteLine(channelId);
+                            DiscordManager.Instance.Name = name.Replace("\0", "");
+                            DiscordManager.Instance.ChannelId = channelId;
+                            DiscordManager.Instance.Level = level;
+                            DiscordManager.Instance.Job = job;
+                            DiscordManager.Instance.MapId = mapId;
+                            DiscordManager.Instance.UpdatePresence();
                         }
                         else
                         {
                             packet.Skip(1);
                             var mapId = packet.ReadInt();
 
-                            Console.WriteLine($"MapId: {mapId}");
+                            DiscordManager.Instance.MapId = mapId;
+                            DiscordManager.Instance.UpdatePresence();
                         }
 
 
