@@ -38,3 +38,9 @@
 
 2. 하나씩 클릭후 채널 변경 (디스코드에 제대로 뜰때까지 하나씩 해보기)
 3. 작동하면 저장하기
+
+
+
+### 오류 문의
+
+[Issues · kokose1234/MapleDiscordRpc (github.com)](https://github.com/kokose1234/MapleDiscordRpc/issues)
