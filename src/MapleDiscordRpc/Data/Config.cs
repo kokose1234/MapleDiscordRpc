@@ -12,6 +12,7 @@
 //   See the License for the specific language governing permissions and
 //   limitations under the License.
 
+using System;
 using System.IO;
 using Newtonsoft.Json;
 
@@ -31,6 +32,9 @@ public sealed class Config
             Save();
         }
     }
+
+    [JsonProperty("networkDevice")]
+    public string NetworkDevice { get; set; } = "이더넷";
 
     [JsonProperty("startMinimized")]
     public bool StartMinimized { get; set; }
@@ -58,7 +62,7 @@ public sealed class Config
         return JsonConvert.DeserializeObject<Config>(File.ReadAllText("./Config.json")) ?? new();
     }
 
-    private static void Save()
+    public static void Save()
     {
         var json = JsonConvert.SerializeObject(s_config, Formatting.Indented);
         File.WriteAllText("./Config.json", json);

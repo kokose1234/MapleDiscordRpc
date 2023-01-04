@@ -12,14 +12,20 @@
 //   See the License for the specific language governing permissions and
 //   limitations under the License.
 
+// ReSharper disable UnusedAutoPropertyAccessor.Global
+
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
+using DynamicData;
 using MapleDiscordRpc.Data;
 using MapleDiscordRpc.Net;
 using PacketDotNet;
 using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 using SharpPcap;
 using SharpPcap.LibPcap;
 
@@ -33,8 +39,35 @@ public sealed class MainViewModel : ReactiveObject
     private Thread _backgroundThread;
     private LibPcapLiveDevice? _device;
 
+    public IList<string> NetworkDeviceList { get; } = new List<string>();
+
+    [Reactive]
+    public bool StartMinimized { get; set; } = Config.Value.StartMinimized;
+
+    [Reactive]
+    public bool ShowCharacterName { get; set; } = Config.Value.ShowCharacterName;
+
+    [Reactive]
+    public bool ShowMap { get; set; } = Config.Value.ShowMap;
+
+    [Reactive]
+    public bool ShowChannel { get; set; } = Config.Value.ShowChannel;
+
+    [Reactive]
+    public bool ShowMapleGG { get; set; } = Config.Value.ShowMapleGG;
+
+    [Reactive]
+    public int SelectedNetworkDevice { get; set; }
+
     public MainViewModel()
     {
+        var networkDeviceNames = LibPcapLiveDeviceList.Instance
+                                                      .Select(x => x.Interface.FriendlyName)
+                                                      .Where(x => !string.IsNullOrEmpty(x))
+                                                      .ToImmutableArray();
+        NetworkDeviceList.AddRange(networkDeviceNames);
+        SelectedNetworkDevice = networkDeviceNames.IndexOf(Config.Value.NetworkDevice);
+
         SetupAdapter();
         _ = DiscordManager.Instance;
     }
@@ -45,15 +78,11 @@ public sealed class MainViewModel : ReactiveObject
 
         foreach (var device in LibPcapLiveDeviceList.Instance)
         {
-#if DEBUG
-            if (device.Interface.FriendlyName == "이더넷")
+            if (device.Interface.FriendlyName == Config.Value.NetworkDevice)
             {
                 _device = device;
                 break;
             }
-#else
-            //TODO: 디바이스 선택
-#endif
         }
 
         if (_device == null)

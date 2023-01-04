@@ -7,9 +7,32 @@
                            xmlns:local="clr-namespace:MapleDiscordRpc"
                            xmlns:reactiveUi="http://reactiveui.net"
                            mc:Ignorable="d"
-                           Title="MapleDiscordRpc" Height="450" Width="800" ResizeMode="NoResize"
-                           WindowStartupLocation="CenterScreen" Background="#333333">
+                           Title="MapleDiscordRpc" Height="250" Width="300" ResizeMode="CanMinimize"
+                           WindowStartupLocation="CenterScreen" Background="#151515"
+                           Icon="pack://application:,,,/MapleDiscordRpc;component/logo.ico">
     <Grid>
-
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="40" />
+        </Grid.RowDefinitions>
+        <StackPanel Margin="7">
+            <ComboBox x:Name="NetworkDeviceList" Margin="0,5">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding}" />
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+            <CheckBox x:Name="StartMinimized" Margin="0,3" FontFamily="나눔고딕" Content="시작시 창 최소화" />
+            <CheckBox x:Name="ShowCharacter" Margin="0,3" FontFamily="나눔고딕" Content="캐릭터 이름 표시" />
+            <CheckBox x:Name="ShowMap" Margin="0,3" FontFamily="나눔고딕" Content="맵 표시" />
+            <CheckBox x:Name="ShowChannel" Margin="0,3" FontFamily="나눔고딕" Content="채널 표시" />
+            <CheckBox x:Name="ShowGG" Margin="0,3" FontFamily="나눔고딕" Content="Maple.gg 캐릭터 정보 표시"
+                      IsEnabled="{Binding ElementName=ShowCharacter, Path=IsChecked}" />
+        </StackPanel>
+        <WrapPanel Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Button x:Name="SaveButton" Margin="5,0" Content="저장" FontFamily="나눔고딕" FontWeight="Bold" />
+            <Button x:Name="HelpButton" Margin="5,0" Content="도움말" FontFamily="나눔고딕" FontWeight="Bold" />
+        </WrapPanel>
     </Grid>
 </reactiveUi:ReactiveWindow>
