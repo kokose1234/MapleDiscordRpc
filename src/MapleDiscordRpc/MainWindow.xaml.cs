@@ -17,6 +17,7 @@ using System.Diagnostics;
 using System.Reactive.Disposables;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using MapleDiscordRpc.Data;
 using ReactiveUI;
 
@@ -55,15 +56,18 @@ namespace MapleDiscordRpc
                 Config.Value.NetworkDevice = NetworkDeviceList.Text;
                 Config.Save();
             });
-            SaveButton.Events().PreviewMouseDown.Subscribe(_ =>
+            SaveButton.Events().PreviewMouseDown.Subscribe(e =>
             {
-                Config.Value.NetworkDevice = NetworkDeviceList.Text;
-                Config.Value.StartMinimized = StartMinimized.IsChecked ?? false;
-                Config.Value.ShowCharacterName = ShowCharacter.IsChecked ?? false;
-                Config.Value.ShowMap = ShowMap.IsChecked ?? false;
-                Config.Value.ShowChannel = ShowChannel.IsChecked ?? false;
-                Config.Value.ShowMapleGG = ShowGG.IsChecked ?? false;
-                Config.Save();
+                if (e.LeftButton == MouseButtonState.Pressed)
+                {
+                    Config.Value.NetworkDevice = NetworkDeviceList.Text;
+                    Config.Value.StartMinimized = StartMinimized.IsChecked ?? false;
+                    Config.Value.ShowCharacterName = ShowCharacter.IsChecked ?? false;
+                    Config.Value.ShowMap = ShowMap.IsChecked ?? false;
+                    Config.Value.ShowChannel = ShowChannel.IsChecked ?? false;
+                    Config.Value.ShowMapleGG = ShowGG.IsChecked ?? false;
+                    Config.Save();
+                }
             });
             HelpButton.Events().PreviewMouseDown.Subscribe(_ => Process.Start("explorer.exe", "https://github.com/kokose1234/MapleDiscordRpc/blob/main/README.md"));
         }

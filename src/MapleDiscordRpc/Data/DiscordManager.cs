@@ -15,7 +15,6 @@
 using System;
 using System.Collections.Generic;
 using DiscordRPC;
-using DiscordRPC.Logging;
 
 namespace MapleDiscordRpc.Data;
 
@@ -87,7 +86,7 @@ public class DiscordManager
             }
 
             buttons.Add(_defaultButton);
-            if (Config.Value.ShowMapleGG)
+            if (Config.Value is {ShowMapleGG: true, ShowCharacterName: true})
             {
                 buttons.Add(new Button
                 {
