@@ -35,7 +35,7 @@ public class MapleDataProvider
     public MapleDataProvider()
     {
         using var client = new HttpClient();
-        var json = client.GetStringAsync("https://gist.githubusercontent.com/kokose1234/dc153b33049896010bb4721df7946016/raw/5be3a17d54221582285a211c37c45ce1f59fd002/map_data.json");
+        var json = client.GetStringAsync("https://gist.githubusercontent.com/kokose1234/d02c8590448a0d4dbfb660d1ae860089/raw/f3098002a3f272e05891b568ea902c0b967c5990/data.json");
         json.Wait();
         _maps = JsonConvert.DeserializeObject<Dictionary<int, MapData>>(json.Result) ?? new();
     }
