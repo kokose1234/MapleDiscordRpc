@@ -17,6 +17,6 @@ namespace MapleDiscordRpc.Net;
 public enum PacketTypes : ushort
 {
     SelectWorldResult = 6,
-    StatChanged = 90,
-    UserEnterField = 497
+    StatChanged = 91,
+    UserEnterField = 500
 }

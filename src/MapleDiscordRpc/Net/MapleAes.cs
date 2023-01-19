@@ -80,10 +80,6 @@ public sealed class MapleAes : IDisposable
         _disposed = true;
     }
 
-    public void ShiftIVOld()
-    {
-        IV = BitConverter.GetBytes(214013 * BitConverter.ToUInt32(IV, 0) + 2531011);
-    }
 
     public bool ConfirmHeader(byte[] pBuffer, int pStart)
     {

@@ -111,15 +111,14 @@ public sealed class MapleSession : IDisposable
                 return SessionResults.Terminated;
             }
 
-            pr.ReadUShort();
-            var version = pr.ReadUShort();
+            var len = pr.ReadUShort();
+            var version = (uint) pr.ReadUShort();
             byte subVersion = 1;
             var patchLocation = "";
 
             if (_remotePort != 8484)
             {
-                version = pr.ReadUShort();
-                pr.ReadUShort();
+                version = pr.ReadUInt();
             }
             else
             {
@@ -143,9 +142,8 @@ public sealed class MapleSession : IDisposable
                 subVersion = (byte) ((temp >> 16) & 0xFF);
             }
 
-            _build = version;
-            _inboundStream = new MapleStream(_build, 1, remoteIv, subVersion, _remotePort);
-            var packet = new MaplePacket(arrivalTime, _build, 1, 0xFFFF, tcpData, 0, BitConverter.ToUInt32(remoteIv, 0));
+            _build = (ushort) version;
+            _inboundStream = new MapleStream(_build, serverLocale, remoteIv, subVersion, _remotePort);
 
             ProcessTcpPacket(tcpPacket, ref _inboundSequence, _inboundBuffer, _inboundStream, arrivalTime);
             return SessionResults.Show;

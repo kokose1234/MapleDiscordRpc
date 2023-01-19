@@ -43,7 +43,7 @@ public class DiscordManager
         _client = new("1058808860414062592");
 
 #if DEBUG
-        _client.Logger = new ConsoleLogger(LogLevel.Trace);
+        _client.Logger = new DiscordRPC.Logging.ConsoleLogger(DiscordRPC.Logging.LogLevel.Trace);
         _client.OnReady += (_, args) => Console.WriteLine("Received Ready from user {0}", args.User.Username);
         _client.OnPresenceUpdate += (_, args) => Console.WriteLine("Received Update! {0}", args.Presence);
 #endif

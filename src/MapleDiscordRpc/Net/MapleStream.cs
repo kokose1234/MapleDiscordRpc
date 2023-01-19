@@ -31,7 +31,7 @@ public sealed class MapleStream
     public MapleStream(ushort build, byte locale, byte[] iv, byte subVersion, ushort port)
     {
         Build = build;
-        _aes = new MapleAes((ushort) (0xFFFF - Build), 1, iv, subVersion);
+        _aes = new MapleAes((ushort) (0xFFFF - Build), locale, iv, subVersion);
 
         if (locale == 1 && Build >= 354)
         {
