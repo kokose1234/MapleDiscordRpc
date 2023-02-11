@@ -58,6 +58,14 @@ public sealed class MaplePacket
         Cursor += 4;
         return val;
     }
+
+    public long ReadLong()
+    {
+        var val = BitConverter.ToInt64(new ReadOnlySpan<byte>(Buffer, Cursor, 8));
+        Cursor += 8;
+        return val;
+    }
+
     public bool ReadLong(out long pValue)
     {
         pValue = 0;
