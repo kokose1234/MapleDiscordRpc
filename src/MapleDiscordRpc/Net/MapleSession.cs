@@ -30,6 +30,12 @@ public sealed class MapleSession : IDisposable
     private int _socks5;
     private ushort _build;
     private bool _isTerminated;
+    private bool _isReboot;
+
+    public MapleSession(bool isReboot)
+    {
+        _isReboot = isReboot;
+    }
 
     public bool MatchTcpPacket(TcpPacket tcpPacket)
     {
@@ -242,10 +248,9 @@ public sealed class MapleSession : IDisposable
                             packet.Skip(10);
                             var level = packet.ReadInt();
                             var job = packet.ReadShort();
-                            packet.Skip(43);
+                            packet.Skip(43 + (_isReboot ? 5 : 0));
                             var mapId = packet.ReadInt();
-
-                            Console.WriteLine(channelId);
+                            
                             DiscordManager.Instance.Name = name.Replace("\0", "");
                             DiscordManager.Instance.ChannelId = channelId;
                             DiscordManager.Instance.Level = level;

@@ -146,14 +146,14 @@ public sealed class MainViewModel : ReactiveObject
                     var tcpPacket = Packet.ParsePacket(packet.LinkLayerType, packet.Data).Extract<TcpPacket>();
                     var hash = tcpPacket.SourcePort << 16 | tcpPacket.DestinationPort;
                     var hashReversed = tcpPacket.DestinationPort << 16 | tcpPacket.SourcePort;
-
+                    
                     try
                     {
                         MapleSession? session = null;
 
                         if (tcpPacket.Synchronize && tcpPacket is {Acknowledgment: false, DestinationPort: >= 8484 and <= 15000})
                         {
-                            session = new MapleSession();
+                            session = new MapleSession(Util.IsReboot(((IPv4Packet)tcpPacket.ParentPacket).DestinationAddress.ToString()));
                             var res = session.BufferTcpPacket(tcpPacket, packet.Timeval.Date);
 
                             if (res == SessionResults.Continue)
